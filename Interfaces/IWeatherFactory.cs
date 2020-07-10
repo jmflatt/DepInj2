@@ -9,7 +9,6 @@ namespace DepInjTwo.Interfaces
 {
     public interface IWeatherFactory
     {
-        void Register(string name, IWeatherService service);
-        IWeatherService Resolve(string name);
+        IWeatherService GetWeatherProvider<T>() where T : IWeatherService;
     }    
 }

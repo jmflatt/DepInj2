@@ -6,20 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DepInjTwo.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using DepInjTwo.models;
 
 namespace DepInjTwo.Services
 {
     public class OhioWeatherService : IWeatherService
     {
-        private readonly IConfiguration _configuration;
-        public OhioWeatherService(IConfiguration configuration)
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IOptionsMonitor<WeatherOptions> _weatherOptions;
+        public OhioWeatherService(IOptionsMonitor<WeatherOptions> options, IServiceProvider serviceProvider)
         {
-            _configuration = configuration;
+            _serviceProvider = serviceProvider;
+            _weatherOptions = options;
         }
 
         public string GetCurrentTemp()
         {
-            return "Ohio Weather " + _configuration["WeatherValue"];
+            return "Ohio Weather " + _weatherOptions.CurrentValue.WeatherValue;
         }
     }    
 }

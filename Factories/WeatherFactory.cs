@@ -9,18 +9,23 @@ using DepInjTwo.Services;
 
 namespace DepInjTwo.Factories
 {
-class WeatherFactory : IWeatherFactory
-{
-    private readonly Dictionary<string, IWeatherService> _clients = new Dictionary<string, IWeatherService>();
-
-    public void Register(string name, IWeatherService client)
+    class WeatherFactory : IWeatherFactory
     {
-        _clients[name] = client;
-    }
 
-    public IWeatherService Resolve(string name)
-    {
-        return _clients[name];
+        private readonly IServiceProvider _serviceProvider;
+
+        public WeatherFactory(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        public IWeatherService GetWeatherProvider<T>() where T : IWeatherService
+        {
+            return (IWeatherService)_serviceProvider.GetService(typeof(T));
+        }
     }
 }
-}
+
+
+
+

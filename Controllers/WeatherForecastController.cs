@@ -14,20 +14,19 @@ namespace DepInjTwo.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private IWeatherFactory _weatherFactory;
         private IWeatherService _ohioWeatherService;
         private IWeatherService _indianaWeatherService;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherFactory weatherFactory)
         {
             _logger = logger;
-            _ohioWeatherService = weatherFactory.Resolve("OhioWeatherService");
-            _indianaWeatherService = weatherFactory.Resolve("IndianaWeatherService");
+
+            _weatherFactory = weatherFactory;
+            _ohioWeatherService = _weatherFactory.GetWeatherProvider<OhioWeatherService>();
+            _indianaWeatherService = _weatherFactory.GetWeatherProvider<IndianaWeatherService>();
         }
 
         [HttpGet]

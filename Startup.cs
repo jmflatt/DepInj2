@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using DepInjTwo.Services;
 using DepInjTwo.Factories;
 using DepInjTwo.Interfaces;
+using DepInjTwo.models;
 
 namespace DepInjTwo
 {
@@ -30,10 +31,21 @@ namespace DepInjTwo
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            var factory = new WeatherFactory();
-            factory.Register("OhioWeatherService", new OhioWeatherService(Configuration));
-            factory.Register("IndianaWeatherService", new IndianaWeatherService(Configuration));
-            services.AddSingleton<IWeatherFactory>(factory);
+            services.Configure<WeatherOptions>(Configuration.GetSection(
+                                        WeatherOptions.Weather));
+
+            services.AddScoped<IWeatherFactory, WeatherFactory>();
+
+            services.AddScoped<OhioWeatherService>()
+                .AddScoped<IWeatherService, OhioWeatherService>(s => s.GetService<OhioWeatherService>());
+
+            services.AddScoped<IndianaWeatherService>()
+                .AddScoped<IWeatherService, IndianaWeatherService>(s => s.GetService<IndianaWeatherService>());
+
+            // var factory = new WeatherFactory();
+            // // factory.Register("OhioWeatherService", new OhioWeatherService(Configuration));
+            // factory.Register("IndianaWeatherService", new IndianaWeatherService(Configuration));
+            // services.AddSingleton<IWeatherFactory>(factory);
 
         }
 
