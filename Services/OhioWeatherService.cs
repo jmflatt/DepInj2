@@ -13,11 +13,9 @@ namespace DepInjTwo.Services
 {
     public class OhioWeatherService : IWeatherService
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly IOptionsMonitor<WeatherOptions> _weatherOptions;
-        public OhioWeatherService(IOptionsMonitor<WeatherOptions> options, IServiceProvider serviceProvider)
+        public OhioWeatherService(IOptionsMonitor<WeatherOptions> options)
         {
-            _serviceProvider = serviceProvider;
             _weatherOptions = options;
         }
 
